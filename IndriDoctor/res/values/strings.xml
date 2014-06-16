@@ -4,5 +4,20 @@
     <string name="app_name">Indri Doctor</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_splash_screen">SplashScreenActivity</string>
+    <string name="str_enviar">Enviar</string>
+    <string name="title_activity_perfil_medico">PerfilMedicoActivity</string>
+    <string name="ipsum">        Lorem ipsum dolor sit amet, consectetuer adipiscing elit, 
+        sed diam nonummy nibh euismod tincidunt ut laoreet dolore 
+        magna aliquam erat volutpat. Ut wisi enim ad minim veniam, 
+        quis nostrud exerci tation ullamcorper suscipit lobortis
+        nisl ut aliquip ex ea commodo consequat. Duis autem vel 
+        eum iriure dolor in hendrerit in vulputate velit esse molestie 
+        consequat, vel illum dolore eu feugiat nulla facilisis at vero 
+        eros et accumsan et iusto odio dignissim qui blandit praesent 
+        luptatum zzril delenit augue duis dolore te feugait nulla facilisi. </string>
+    <string name="nome_medico">Dr. Luiz da Silva</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_main2">MainActivity</string>
 
 </resources>

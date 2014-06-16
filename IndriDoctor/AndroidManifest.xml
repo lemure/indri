@@ -12,26 +12,39 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_indri_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme">
-        
-        
+        android:theme="@style/AppTheme" >
+
         <!-- Activities -->
-        
-        <activity android:name="br.com.lemures.indridoctor.MainActivity"
-            	  android:label="@string/app_name" 
-            	  android:screenOrientation="portrait"
-            	  android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-            	  >
-           
-			<intent-filter>
+
+
+        <!-- Splash Screen -->
+        <activity
+            android:name="br.com.lemures.indridoctor.SplashScreenActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" >
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            
+        </activity>
+
+        <!-- Perfil Médico -->
+        <activity
+            android:name="br.com.lemures.indridoctor.PerfilMedicoActivity"
+            android:parentActivityName="br.com.lemures.indridoctor.MainActivity"
+            android:label="@string/nome_medico"
+            >
         </activity>
         
-        
-        
-        
+      <!-- Main -->
+        <activity
+            android:name="br.com.lemures.indridoctor.MainActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" >
+        </activity>
     </application>
+
 </manifest>
