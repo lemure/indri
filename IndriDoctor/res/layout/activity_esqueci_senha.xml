@@ -28,13 +28,15 @@
         android:layout_alignParentRight="true"
         android:layout_toRightOf="@+id/textView1"
         android:ems="10"
-        android:inputType="textEmailAddress" >
+        android:inputType="textEmailAddress"
+        android:singleLine="true"
+         >
 
         <requestFocus />
     </EditText>
 
     <Button
-        android:id="@+id/button1"
+        android:id="@+id/bt_enviar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/textView1"
@@ -46,9 +48,9 @@
         android:id="@+id/bt_cancelar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/button1"
+        android:layout_alignBottom="@+id/bt_enviar"
         android:layout_marginLeft="38dp"
-        android:layout_toRightOf="@+id/button1"
+        android:layout_toRightOf="@+id/bt_enviar"
         android:text="Cancelar" />
 
     <TextView

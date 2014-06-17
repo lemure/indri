@@ -1,25 +1,41 @@
 package br.com.lemures.indridoctor;
 
+import org.ksoap2.SoapEnvelope;
+import org.ksoap2.serialization.SoapObject;
+import org.ksoap2.serialization.SoapSerializationEnvelope;
+import org.ksoap2.transport.HttpTransportSE;
+
+import android.app.Activity;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.NavUtils;
-import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Toast;
+import br.com.lemures.indridoctor.constants.Constantes;
+import br.com.lemures.indridoctor.model.PacienteVO;
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends Activity implements Runnable {
 
 	final Context context = this;
 	private Button btEsqueciSenha;  
+	private Button btEnviar;
 	private ImageButton btPerfilMedico;  
-	
-	
+	private ProgressDialog dialog;
+	private EditText txtLogin;
+	private EditText txtSenha;
+	private String toastText;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -27,9 +43,31 @@ public class MainActivity extends ActionBarActivity {
 		
 		btEsqueciSenha =  (Button) findViewById(R.id.bt_esqueci_senha);
 		btPerfilMedico = (ImageButton) findViewById(R.id.bt_perfil_medico);
+		btEnviar = (Button) findViewById(R.id.bt_enviar);
+		txtLogin = (EditText) findViewById(R.id.txt_login);
+		txtSenha = (EditText) findViewById(R.id.txt_senha);
 		
 		/**
-		 * 
+		 * btEnviar Onclick
+		 */
+		btEnviar.setOnClickListener(new OnClickListener() {
+			 
+			@Override
+			public void onClick(View arg0) {
+
+				try{
+					dialog = ProgressDialog.show(MainActivity.this, "Login/Senha", "Aguardando Validação do Usuário", true);
+					new Thread(MainActivity.this).start();
+				}
+				catch(Exception e){
+					System.out.println(e.getMessage());
+				}	
+			}
+		});
+		
+		
+		/**
+		 * btPerfilMedico Onclick
 		 */
 		btPerfilMedico.setOnClickListener(new OnClickListener() {
 			 
@@ -40,10 +78,11 @@ public class MainActivity extends ActionBarActivity {
 				  startActivity(intent);
 				  
 			  }
-			});
+		});
+		
 		
 		/**
-		 * 
+		 * btEsqueciSenha Onclick
 		 */
 		btEsqueciSenha.setOnClickListener(new OnClickListener() {
 			 
@@ -54,9 +93,18 @@ public class MainActivity extends ActionBarActivity {
 				dialog.setContentView(R.layout.activity_esqueci_senha);
 				dialog.setTitle("Reenvio de Senha");
 	 
-				Button dialogButton = (Button) dialog.findViewById(R.id.bt_cancelar);
-
-				dialogButton.setOnClickListener(new OnClickListener() {
+				Button btCancelar = (Button) dialog.findViewById(R.id.bt_cancelar);
+				Button btEnviar = (Button) dialog.findViewById(R.id.bt_enviar);
+				
+				btEnviar.setOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						Toast.makeText(context, "E-mail enviado com sucesso.", Toast.LENGTH_SHORT).show();							
+						dialog.dismiss();
+					}
+				});
+				
+				btCancelar.setOnClickListener(new OnClickListener() {
 					@Override
 					public void onClick(View v) {
 						dialog.dismiss();
@@ -72,7 +120,6 @@ public class MainActivity extends ActionBarActivity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 
-		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main2, menu);
 		return true;
 	}
@@ -88,5 +135,81 @@ public class MainActivity extends ActionBarActivity {
 	        }
 	    }
 
+	   
+	   
+	   /**
+	    * Thread responsavel por iniciar a chamada do webservidce de validação do usuário
+	    */
+  	  @Override 
+	   public void run() { 
+		   doLoginWS();
+	   }
 
+	
+	   private final String METHOD_NAME="fazerLogin";
+	   private final String NAMESPACE ="http://vo.indridoctor.com.br";      
+	   private final String SOAP_ACTION ="";
+	   private final String URL = Constantes.IP_SERVER + "/IndriDoctorWS/services/PacienteWS";
+	   
+	   /**
+	    * Chama o webservice que faz a validação do usuário
+	    */
+	   public PacienteVO doLoginWS() {
+		   
+		   
+		SoapObject soap = new SoapObject(NAMESPACE, METHOD_NAME);
+			soap.addProperty(Constantes.LOGIN, txtLogin.getText().toString());
+			soap.addProperty(Constantes.SENHA, txtSenha.getText().toString());
+			
+		PacienteVO vo = null;
+	    
+		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+			envelope.bodyOut = soap;
+			envelope.setOutputSoapObject(soap);
+		
+		HttpTransportSE httpTransport = new HttpTransportSE(URL);
+		
+		try { 
+
+			httpTransport.call(SOAP_ACTION, envelope); 
+			SoapObject responseWS = (SoapObject)envelope.getResponse();
+			
+			if(responseWS !=  null){
+				vo = new PacienteVO();
+				vo.setNome((responseWS.getProperty(Constantes.NOME)).toString());
+				vo.setEmail((responseWS.getProperty(Constantes.EMAIL)).toString());
+				vo.setLogin((responseWS.getProperty(Constantes.LOGIN)).toString());
+				vo.setSenha((responseWS.getProperty(Constantes.SENHA)).toString());
+				dialog.dismiss();
+			}
+			else{
+				toastText = "Usuário ou senha incorretos.";
+				h.sendMessage(new Message());
+				dialog.dismiss();
+			}
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			dialog.dismiss();
+			toastText = "Houve um problema ao tentar realizar o Login.";
+			h.sendMessage(new Message());
+		}
+
+		return vo;
+
+	   } 
+	   
+	  
+	   /**
+	    * Faz a chamada do Toast através de uma thread diferente da principal (no caso a do webservice)
+	    */
+	   Handler h = new Handler(){
+		   @Override
+		   public void handleMessage(Message msg){
+			   Toast.makeText(context, toastText, Toast.LENGTH_SHORT).show();	
+		   }
+	   };
+	   
+	   
+	   
 }
