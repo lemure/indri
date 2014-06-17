@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?><!-- Use this file to deploy some handlers/chains and services      --><!-- Two ways to do this:                                           --><!--   java org.apache.axis.client.AdminClient deploy.wsdd          --><!--      after the axis server is running                          --><!-- or                                                             --><!--   java org.apache.axis.utils.Admin client|server deploy.wsdd   --><!--      from the same directory that the Axis engine runs         --><deployment xmlns="http://xml.apache.org/axis/wsdd/" xmlns:java="http://xml.apache.org/axis/wsdd/providers/java">
+
+  <!-- Services from PacienteWSService WSDL service -->
+
+  <service name="PacienteWS" provider="java:RPC" style="wrapped" use="literal">
+      <parameter name="wsdlTargetNamespace" value="http://ws.indridoctor.com.br"/>
+      <parameter name="wsdlServiceElement" value="PacienteWSService"/>
+      <parameter name="schemaQualified" value="http://ws.indridoctor.com.br,http://vo.indridoctor.com.br"/>
+      <parameter name="wsdlServicePort" value="PacienteWS"/>
+      <parameter name="className" value="br.com.indridoctor.ws.PacienteWS"/>
+      <parameter name="wsdlPortType" value="PacienteWS"/>
+      <parameter name="typeMappingVersion" value="1.2"/>
+      <operation xmlns:operNS="http://ws.indridoctor.com.br" xmlns:retNS="http://ws.indridoctor.com.br" xmlns:rtns="http://vo.indridoctor.com.br" name="fazerLogin" qname="operNS:fazerLogin" returnQName="retNS:fazerLoginReturn" returnType="rtns:PacienteVO" soapAction="">
+        <parameter xmlns:pns="http://ws.indridoctor.com.br" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:login" type="tns:string"/>
+        <parameter xmlns:pns="http://ws.indridoctor.com.br" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:senha" type="tns:string"/>
+      </operation>
+      <parameter name="allowedMethods" value="fazerLogin"/>
+
+      <typeMapping xmlns:ns="http://vo.indridoctor.com.br" qname="ns:PacienteVO" type="java:br.com.indridoctor.vo.PacienteVO" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle=""/>
+  </service>
+</deployment>

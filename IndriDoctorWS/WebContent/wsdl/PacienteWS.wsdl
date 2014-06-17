@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions targetNamespace="http://ws.indridoctor.com.br" xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:impl="http://ws.indridoctor.com.br" xmlns:intf="http://ws.indridoctor.com.br" xmlns:tns1="http://vo.indridoctor.com.br" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<!--WSDL created by Apache Axis version: 1.4
+Built on Apr 22, 2006 (06:55:48 PDT)-->
+ <wsdl:types>
+  <schema elementFormDefault="qualified" targetNamespace="http://ws.indridoctor.com.br" xmlns="http://www.w3.org/2001/XMLSchema">
+   <import namespace="http://vo.indridoctor.com.br"/>
+   <element name="fazerLogin">
+    <complexType>
+     <sequence>
+      <element name="login" type="xsd:string"/>
+      <element name="senha" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="fazerLoginResponse">
+    <complexType>
+     <sequence>
+      <element name="fazerLoginReturn" type="tns1:PacienteVO"/>
+     </sequence>
+    </complexType>
+   </element>
+  </schema>
+  <schema elementFormDefault="qualified" targetNamespace="http://vo.indridoctor.com.br" xmlns="http://www.w3.org/2001/XMLSchema">
+   <complexType name="PacienteVO">
+    <sequence>
+     <element name="email" nillable="true" type="xsd:string"/>
+     <element name="id" nillable="true" type="xsd:int"/>
+     <element name="login" nillable="true" type="xsd:string"/>
+     <element name="nome" nillable="true" type="xsd:string"/>
+     <element name="senha" nillable="true" type="xsd:string"/>
+    </sequence>
+   </complexType>
+  </schema>
+ </wsdl:types>
+
+   <wsdl:message name="fazerLoginRequest">
+
+      <wsdl:part element="impl:fazerLogin" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="fazerLoginResponse">
+
+      <wsdl:part element="impl:fazerLoginResponse" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:portType name="PacienteWS">
+
+      <wsdl:operation name="fazerLogin">
+
+         <wsdl:input message="impl:fazerLoginRequest" name="fazerLoginRequest">
+
+       </wsdl:input>
+
+         <wsdl:output message="impl:fazerLoginResponse" name="fazerLoginResponse">
+
+       </wsdl:output>
+
+      </wsdl:operation>
+
+   </wsdl:portType>
+
+   <wsdl:binding name="PacienteWSSoapBinding" type="impl:PacienteWS">
+
+      <wsdlsoap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+
+      <wsdl:operation name="fazerLogin">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="fazerLoginRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="fazerLoginResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+   </wsdl:binding>
+
+   <wsdl:service name="PacienteWSService">
+
+      <wsdl:port binding="impl:PacienteWSSoapBinding" name="PacienteWS">
+
+         <wsdlsoap:address location="http://localhost:8080/IndriDoctorWS/services/PacienteWS"/>
+
+      </wsdl:port>
+
+   </wsdl:service>
+
+</wsdl:definitions>

@@ -184,8 +184,9 @@ public class MainActivity extends Activity implements Runnable {
 			}
 			else{
 				toastText = "Usuário ou senha incorretos.";
-				h.sendMessage(new Message());
 				dialog.dismiss();
+				h.sendMessage(new Message());
+				
 			}
 		}
 		catch(Exception e){
